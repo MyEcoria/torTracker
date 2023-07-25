@@ -41,7 +41,7 @@ async function scanRssFeed(rssUrl) {
 const rssUrl = 'https://www.torrent911.me/rss';
 
 // Interval de temps (en millisecondes) pour scanner le flux (par exemple, toutes les 5 minutes)
-const intervalTime = 5 * 60 * 1000;
+const intervalTime = 15 * 60 * 1000;
 
 // Lancer le scan initial
 scanRssFeed(rssUrl);

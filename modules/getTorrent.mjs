@@ -11,7 +11,19 @@ export async function getTorrentInfo(torrentUrl) {
 
   async function fetchHTML(url) {
     try {
-      const response = await axios.get(url);
+      // Use the http.Agent to set the proxy for the request
+      const httpAgent = new http.Agent({ proxy: { host: 'p.webshare.io', port: 80 } });
+      
+      // Set the proxy and auth in the config object
+      const response = await axios.get(url, {
+        proxy: { host: 'p.webshare.io', port: 80 },
+        auth: {
+          username: 'arnhfanj-rotate',
+          password: 's63wes3krp6g'
+        },
+        httpAgent: httpAgent
+      });
+      
       return response.data;
     } catch (error) {
       console.error('Error fetching HTML:', error.message);
