@@ -1,11 +1,13 @@
 import mysql from 'mysql2/promise';
 
+
 // Configuration for your MySQL connection
 const dbConfig = {
-    host: '51.38.224.98',
-    user: 'myecoria',
-    password: 'prout',
-    database: 'tor',
+  host: 'localhost',
+  user: 'root',
+  password: 'prout',
+  database: 'tornano',
+  port: 3307,
 };
 
 // Function to create a new torrent entry in the database
@@ -19,13 +21,14 @@ export async function createTorrent(name, magnet, img) {
     if (existingTorrent) {
       console.log('Torrent with this magnet already exists in the database.');
       connection.end();
-      return;
+      return "nop";
     }
 
     const sql = 'INSERT INTO torrents (name, magnet, img) VALUES (?, ?, ?)';
     const [result] = await connection.execute(sql, [name, magnet, img]);
     console.log('Torrent created successfully with ID:', result.insertId);
     connection.end();
+    return result.insertId;
   } catch (error) {
     console.error('Error creating torrent:', error.message);
   }

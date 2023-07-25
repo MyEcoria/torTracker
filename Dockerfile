@@ -4,4 +4,4 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 EXPOSE 3000
-CMD ["node", "index.js"]
+CMD ["node", "--max-old-space-size=2000", "index.mjs"]

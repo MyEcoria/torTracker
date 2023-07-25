@@ -2,13 +2,17 @@ import Parser from 'rss-parser';
 const parser = new Parser();
 import * as db from '../modules/db.mjs'; // Replace "your-mysql-module" with the actual module name containing the createTorrent function
 import * as torr from '../modules/getTorrent.mjs';
+import peersDHT from '../modules/peers.mjs';
 
 // Fonction pour extraire et traiter les nouvelles données du flux RSS
 async function processNewData(item) {
   const torrentInfo = await torr.getTorrentInfo(item.link);
   const existingTorrent = await db.createTorrent(item.title, torrentInfo.magnetLink, torrentInfo.image);
-  if (existingTorrent) {
+  
+  if (existingTorrent == "nop") {
     console.log('Torrent with this magnet already exists in the database.');
+  } else {
+    await peersDHT(existingTorrent, torrentInfo.magnetLink);
   }
 }
 
