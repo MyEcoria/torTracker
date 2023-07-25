@@ -10,6 +10,7 @@
     "magnet-uri": "^7.0.5",
     "mysql2": "^3.5.2",
     "node-ipinfo": "^3.4.2",
+    "request": "^2.88.2",
     "rss-parser": "^3.13.0"
   }
 }
