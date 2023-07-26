@@ -2,6 +2,8 @@ import express from 'express';
 const { Request, Response } = express;
 import * as db from '../modules/db.mjs';
 import { param, validationResult } from 'express-validator';
+import * as torr from '../modules/getTorrent.mjs';
+import peersDHT from '../modules/peers.mjs';
 
 // Créer une instance d'Express
 const app = express();
@@ -57,6 +59,22 @@ app.get('/info/peers', async (req, res) => {
   
     const numbers = await db.getNumberOfPeers();
     return res.send({ numbers });
+});
+
+app.get('/add/:id', async (req, res) => {
+
+  // Récupérer le paramètre userId depuis l'URL
+  const id = req.params.id;
+
+  const torrentInfo = await torr.getTorrentInfo(`https://www.torrent911.io/torrent/${id}`);
+  const existingTorrent = await db.createTorrent(torrentInfo.name, torrentInfo.magnetLink, torrentInfo.image);
+  
+  if (existingTorrent == "nop") {
+    console.log('Torrent with this magnet already exists in the database.');
+  } else {
+    await peersDHT(existingTorrent, torrentInfo.magnetLink);
+  }
+  return res.send("ok");
 });
 
 // Démarrer le serveur

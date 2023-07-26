@@ -4,4 +4,6 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 EXPOSE 3000
-CMD ["node", "--max-old-space-size=2000", "index.mjs"]
+RUN export http_proxy="http://arnhfanj-rotate:s63wes3krp6g@p.webshare.io:80/"
+RUN export https_proxy="http://arnhfanj-rotate:s63wes3krp6g@p.webshare.io:80/"
+CMD ["node", "index.mjs"]
