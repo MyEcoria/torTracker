@@ -10,7 +10,10 @@
     "magnet-uri": "^7.0.5",
     "mysql2": "^3.5.2",
     "node-ipinfo": "^3.4.2",
+    "path": "^0.12.7",
     "request": "^2.88.2",
-    "rss-parser": "^3.13.0"
+    "rss-parser": "^3.13.0",
+    "sqlite": "^5.0.1",
+    "sqlite3": "^5.1.6"
   }
 }
