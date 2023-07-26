@@ -12,17 +12,17 @@ export async function getTorrentInfo(torrentUrl) {
   async function fetchHTML(url) {
     return new Promise((resolve, reject) => {
       // Define the proxy URL with authentication
-      const proxyURL = 'http://arnhfanj-rotate:s63wes3krp6g@p.webshare.io:80/';
+      const proxyURL = 'http://127.0.0.1:5566';
   
       // Set the options for the request
       const requestOptions = {
         url,
         proxy: proxyURL,
         // Provide proxy authentication credentials
-        auth: {
-          username: 'arnhfanj-rotate',
-          password: 's63wes3krp6g'
-        }
+        // auth: {
+          // username: 'arnhfanj-rotate',
+          // password: 's63wes3krp6g'
+        //}
       };
   
       // Make the request using the proxy
