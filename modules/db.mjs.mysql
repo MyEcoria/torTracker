@@ -5,8 +5,8 @@ import mysql from 'mysql2/promise';
 const dbConfig = {
   host: 'localhost',
   user: 'root',
-  password: 'prout',
-  database: 'tornano',
+  password: '',
+  database: '',
   port: 3307,
 };
 

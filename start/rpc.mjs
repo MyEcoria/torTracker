@@ -4,6 +4,7 @@ import * as db from '../modules/db.mjs';
 import { param, validationResult } from 'express-validator';
 import * as torr from '../modules/getTorrent.mjs';
 import peersDHT from '../modules/peers.mjs';
+import config from '../config/general.json' assert { type: 'json' };
 
 // Créer une instance d'Express
 const app = express();
@@ -66,7 +67,7 @@ app.get('/add/:id', async (req, res) => {
   // Récupérer le paramètre userId depuis l'URL
   const id = req.params.id;
 
-  const torrentInfo = await torr.getTorrentInfo(`https://www.torrent911.io/torrent/${id}`);
+  const torrentInfo = await torr.getTorrentInfo(`${config.torrent911Id}${id}`);
   const existingTorrent = await db.createTorrent(torrentInfo.name, torrentInfo.magnetLink, torrentInfo.image);
   
   if (existingTorrent == "nop") {

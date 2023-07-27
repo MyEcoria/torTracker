@@ -4,6 +4,8 @@ import * as db from '../modules/db.mjs'; // Replace "your-mysql-module" with the
 import * as torr from '../modules/getTorrent.mjs';
 import peersDHT from '../modules/peers.mjs';
 
+import config from '../config/general.json' assert { type: 'json' };
+
 // Fonction pour extraire et traiter les nouvelles données du flux RSS
 async function processNewData(item) {
   const torrentInfo = await torr.getTorrentInfo(item.link);
@@ -38,7 +40,7 @@ async function scanRssFeed(rssUrl) {
 }
 
 // Lien du flux RSS que vous souhaitez scanner
-const rssUrl = 'https://www.torrent911.me/rss';
+const rssUrl = config.torrent911;
 
 // Interval de temps (en millisecondes) pour scanner le flux (par exemple, toutes les 5 minutes)
 const intervalTime = 15 * 60 * 1000;

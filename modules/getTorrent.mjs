@@ -1,5 +1,6 @@
 import cheerio from 'cheerio';
 import request from 'request';
+import config from '../config/general.json' assert { type: 'json' };
 
 export async function getTorrentInfo(torrentUrl) {
   function removeTrackersFromMagnet(magnetLink) {
@@ -12,7 +13,7 @@ export async function getTorrentInfo(torrentUrl) {
   async function fetchHTML(url) {
     return new Promise((resolve, reject) => {
       // Define the proxy URL with authentication
-      const proxyURL = 'http://arnhfanj-rotate:s63wes3krp6g@p.webshare.io:80/';
+      const proxyURL = config.proxy;
   
       // Set the options for the request
       const requestOptions = {
@@ -20,8 +21,8 @@ export async function getTorrentInfo(torrentUrl) {
         proxy: proxyURL,
         // Provide proxy authentication credentials
         // auth: {
-          // username: 'arnhfanj-rotate',
-          // password: 's63wes3krp6g'
+          // username: '',
+          // password: ''
         //}
       };
   

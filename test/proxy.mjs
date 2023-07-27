@@ -3,7 +3,7 @@ import request from 'request';
 async function fetchHTML(url) {
   return new Promise((resolve, reject) => {
     // Define the proxy URL with authentication
-    const proxyURL = 'http://arnhfanj-rotate:s63wes3krp6g@p.webshare.io:80/';
+    const proxyURL = '';
 
     // Set the options for the request
     const requestOptions = {
@@ -11,8 +11,8 @@ async function fetchHTML(url) {
       proxy: proxyURL,
       // Provide proxy authentication credentials
       auth: {
-        username: 'arnhfanj-rotate',
-        password: 's63wes3krp6g'
+        username: '',
+        password: ''
       }
     };
 
