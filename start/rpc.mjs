@@ -5,6 +5,17 @@ import { param, validationResult } from 'express-validator';
 import * as torr from '../modules/getTorrent.mjs';
 import peersDHT from '../modules/peers.mjs';
 import config from '../config/general.json' assert { type: 'json' };
+import rateLimit from 'express-rate-limit';
+import cacheService from 'express-api-cache';
+
+var cache = cacheService.cache;
+
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+})
 
 // Créer une instance d'Express
 const app = express();
@@ -17,6 +28,7 @@ const PORT = 3000;
 
 // Middleware pour le parsing du corps des requêtes en JSON
 app.use(express.json());
+app.use(limiter);
 
 // Route GET avec un paramètre
 app.get('/ip/:ip', validateIP, async (req, res) => {
@@ -38,7 +50,7 @@ app.get('/ip/:ip', validateIP, async (req, res) => {
     return res.json({ informations });
 });
 
-app.get('/info/torrents', async (req, res) => {
+app.get('/info/torrents', cache("10 minutes"), async (req, res) => {
     // Vérifier les erreurs de validation et renvoyer une réponse d'erreur si nécessaire
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -50,7 +62,7 @@ app.get('/info/torrents', async (req, res) => {
     return res.send({ numbers });
 });
 
-app.get('/info/peers', async (req, res) => {
+app.get('/info/peers', cache("10 minutes"), async (req, res) => {
     // Vérifier les erreurs de validation et renvoyer une réponse d'erreur si nécessaire
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
