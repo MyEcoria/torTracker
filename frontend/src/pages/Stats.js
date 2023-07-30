@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Collapse, Text, Grid, Table, createTheme, NextUIProvider, Card } from "@nextui-org/react";
+import { Text, Grid, createTheme, NextUIProvider, Card } from "@nextui-org/react";
 import { NavBarre } from "../components/navbar";
 
 const theme = createTheme({

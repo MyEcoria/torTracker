@@ -1,4 +1,4 @@
-import { Collapse, Text, Grid, Table, createTheme, NextUIProvider } from "@nextui-org/react";
+import { Collapse, Text, Grid, createTheme, NextUIProvider } from "@nextui-org/react";
 import { NavBarre } from "../components/navbar"; 
 
 const theme = createTheme({
