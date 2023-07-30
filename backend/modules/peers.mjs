@@ -5,18 +5,7 @@ import cool from 'magnet-uri';
 import geoip from 'geoip-lite';
 import net from 'net';
 
-export function getRandomNumberBetween(min, max) {
-  // Generate a random number between 0 (inclusive) and 1 (exclusive)
-  const randomFraction = Math.random();
-
-  // Calculate the range between the minimum and maximum values
-  const range = max - min;
-
-  // Calculate the random number within the desired range
-  const randomNumber = Math.floor(randomFraction * range) + min;
-
-  return randomNumber;
-}
+const availablePorts = Array.from({ length: 65535 }, (_, i) => i + 1);
 
 async function isPortAvailable(port) {
   return new Promise((resolve) => {
@@ -32,25 +21,19 @@ async function isPortAvailable(port) {
   });
 }
 
-export async function getRandomAvailablePort(min, max) {
-  const maxAttempts = 10;
-  let attempts = 0;
-
-  while (attempts < maxAttempts) {
-    const port = getRandomNumberBetween(min, max);
+export async function getRandomAvailablePort() {
+  for (const port of availablePorts) {
     const isAvailable = await isPortAvailable(port);
     if (isAvailable) {
       return port;
     }
-    attempts++;
   }
-
-  throw new Error(`Failed to find an available port after ${maxAttempts} attempts.`);
+  throw new Error('Failed to find an available port.');
 }
 
 export default async function bittorrentDHT(id, magnet) {
   try {
-    const port = await getRandomAvailablePort(1, 65535);
+    const port = await getRandomAvailablePort();
     const dht = new DHT();
     dht.listen(port, function () {
       console.log(`DHT listening on port ${port}`);
