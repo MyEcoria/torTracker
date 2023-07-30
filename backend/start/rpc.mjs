@@ -12,6 +12,11 @@ import cors from 'cors';
 
 var cache = cacheService.cache;
 
+// Créer une instance d'Express
+const app = express();
+
+app.set('trust proxy', 1);
+
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
 	max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
@@ -19,8 +24,7 @@ const limiter = rateLimit({
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 })
 
-// Créer une instance d'Express
-const app = express();
+
 
 // Middleware de validation pour vérifier si 'ip' est une adresse IP valide
 const validateIP = param('ip').isIP();
