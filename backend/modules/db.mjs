@@ -97,7 +97,8 @@ function listAllTables() {
         }
       });
     });
-  }
+}
+
 listAllTables();
 
 // Function to create a new torrent entry in the database
@@ -232,6 +233,21 @@ export function closeDatabase() {
       } else {
         console.log('Database connection closed.');
         resolve();
+      }
+    });
+  });
+}
+
+// Function to get a peer by IP from the database
+export function getTorrentInfo(id) {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT * FROM torrents WHERE id = ?';
+    db.get(sql, [id], (err, row) => {
+      if (err) {
+        console.error('Error fetching peer by IP:', err.message);
+        reject(err);
+      } else {
+        resolve(row || null);
       }
     });
   });

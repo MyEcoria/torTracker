@@ -7,6 +7,8 @@ import peersDHT from '../modules/peers.mjs';
 import config from '../config/general.json' assert { type: 'json' };
 import rateLimit from 'express-rate-limit';
 import cacheService from 'express-api-cache';
+import cors from 'cors';
+
 
 var cache = cacheService.cache;
 
@@ -24,11 +26,12 @@ const app = express();
 const validateIP = param('ip').isIP();
 
 // Définir un port pour le serveur
-const PORT = 3000;
+const PORT = config.port;
 
 // Middleware pour le parsing du corps des requêtes en JSON
 app.use(express.json());
 app.use(limiter);
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 // Route GET avec un paramètre
 app.get('/ip/:ip', validateIP, async (req, res) => {
@@ -88,6 +91,20 @@ app.get('/add/:id', async (req, res) => {
     await peersDHT(existingTorrent, torrentInfo.magnetLink);
   }
   return res.send("ok");
+});
+
+app.get('/torrent/:id', async (req, res) => {
+  
+  // Récupérer le paramètre userId depuis l'URL
+  const id = req.params.id;
+
+  // Vérifier si le paramètre userId est présent
+  if (!id) {
+    return res.status(400).json({ error: 'Paramètre "id" manquant.' });
+  }
+
+  const informations = await db.getTorrentInfo(id);
+  return res.json(informations);
 });
 
 // Démarrer le serveur
