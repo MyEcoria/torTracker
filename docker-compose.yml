@@ -7,6 +7,6 @@ services:
       - "3001:3001"
 
   tortracker:
-    image: tortracker
+    image: tortracker:frontend
     ports:
       - "3000:3000"
