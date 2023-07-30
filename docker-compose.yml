@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  tortracker-backend:
+    image: tortracker:backend
+    ports:
+      - "3001:3001"
+
+  tortracker:
+    image: tortracker
+    ports:
+      - "3000:3000"
