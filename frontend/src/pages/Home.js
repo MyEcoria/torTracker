@@ -63,6 +63,7 @@ export default function App() {
     event.preventDefault();
 
     try {
+      document.getElementById('allForm').style.display = 'none';
       setLoading(true);
       setError(false);
       setSuccess(false);
