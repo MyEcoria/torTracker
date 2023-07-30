@@ -22,14 +22,30 @@ async function isPortAvailable(port) {
 }
 
 export async function getRandomAvailablePort() {
-  for (const port of availablePorts) {
+  const minPort = 100;
+  const maxPort = 65535;
+  const range = maxPort - minPort + 1;
+
+  // Generate a random port within the desired range
+  const randomPort = Math.floor(Math.random() * range) + minPort;
+
+  // Check if the random port is available
+  const isAvailable = await isPortAvailable(randomPort);
+  if (isAvailable) {
+    return randomPort;
+  }
+
+  // If the random port is not available, try the next available port in sequence
+  for (let port = minPort; port <= maxPort; port++) {
     const isAvailable = await isPortAvailable(port);
     if (isAvailable) {
       return port;
     }
   }
+
   throw new Error('Failed to find an available port.');
 }
+
 
 export default async function bittorrentDHT(id, magnet) {
   try {
