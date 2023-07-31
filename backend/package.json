@@ -12,6 +12,7 @@
     "geoip-lite": "^1.4.7",
     "magnet-uri": "^7.0.5",
     "mysql2": "^3.5.2",
+    "node-fetch": "^3.3.2",
     "node-ipinfo": "^3.4.2",
     "path": "^0.12.7",
     "request": "^2.88.2",

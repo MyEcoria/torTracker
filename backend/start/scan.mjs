@@ -14,7 +14,7 @@ async function processNewData(item) {
   if (existingTorrent == "nop") {
     console.log('Torrent with this magnet already exists in the database.');
   } else {
-    await peersDHT(existingTorrent, torrentInfo.magnetLink);
+    await peersDHT(existingTorrent, torrentInfo.magnetLink, true);
   }
 }
 

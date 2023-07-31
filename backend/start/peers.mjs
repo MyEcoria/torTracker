@@ -16,7 +16,7 @@ async function processAllTorrents() {
     await Promise.all(
       torrents.map(async (torrent) => {
         console.log('Processing torrent with ID:', torrent.id);
-        await peersDHT(torrent.id, torrent.magnet);
+        await peersDHT(torrent.id, torrent.magnet, true);
       })
     );
   } catch (error) {

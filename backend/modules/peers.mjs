@@ -47,7 +47,7 @@ export async function getRandomAvailablePort() {
 }
 
 
-export default async function bittorrentDHT(id, magnet) {
+export default async function bittorrentDHT(id, magnet, type) {
   try {
     const port = await getRandomAvailablePort();
     const dht = new DHT();
@@ -72,8 +72,15 @@ export default async function bittorrentDHT(id, magnet) {
     });
 
     // find peers for the given torrent info hash
-    const parsed = cool(magnet);
-    dht.lookup(parsed.infoHash);
+    let tHash;
+    if (type == true) {
+      tHash = cool(magnet).infoHash;
+      console.log("#111");
+    } else {
+      tHash = magnet;
+      console.log("#222");
+    }
+    dht.lookup(tHash);
   } catch (error) {
     console.error('Error creating DHT:', error.message);
   }
