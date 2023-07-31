@@ -7,17 +7,24 @@ import net from 'net';
 
 const availablePorts = Array.from({ length: 65535 }, (_, i) => i + 1);
 
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function isPortAvailable(port) {
-  return new Promise((resolve) => {
+  return new Promise(async (resolve) => {
     const server = net.createServer();
     server.on('error', () => {
       resolve(false);
     });
-    server.listen(port, () => {
+    server.listen(port, async () => {
       server.close(() => {
         resolve(true);
       });
     });
+    // Add a random delay between 1 and 5 seconds before resolving the promise
+    const randomDelay = Math.floor(Math.random() * 5000) + 1000;
+    await delay(randomDelay);
   });
 }
 
