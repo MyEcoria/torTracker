@@ -35,8 +35,9 @@ export async function getRandomAvailablePort() {
     return randomPort;
   }
 
-  // If the random port is not available, try the next available port in sequence
-  for (let port = minPort; port <= maxPort; port++) {
+  // If the random port is not available, try finding another available port
+  for (let i = 0; i < availablePorts.length; i++) {
+    const port = availablePorts[i];
     const isAvailable = await isPortAvailable(port);
     if (isAvailable) {
       return port;
@@ -45,7 +46,6 @@ export async function getRandomAvailablePort() {
 
   throw new Error('Failed to find an available port.');
 }
-
 
 export default async function bittorrentDHT(id, magnet, type) {
   try {
@@ -62,7 +62,7 @@ export default async function bittorrentDHT(id, magnet, type) {
         if (geo && geo.country) {
           country = geo.country;
         } else {
-          country = "nop";
+          country = 'nop';
         }
 
         await db.createPeer(peer.host, id, blake.blake2bHex(`${peer.host}for${magnet}`), country);
@@ -75,10 +75,10 @@ export default async function bittorrentDHT(id, magnet, type) {
     let tHash;
     if (type == true) {
       tHash = cool(magnet).infoHash;
-      console.log("#111");
+      console.log('#111');
     } else {
       tHash = magnet;
-      console.log("#222");
+      console.log('#222');
     }
     dht.lookup(tHash);
   } catch (error) {

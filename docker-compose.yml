@@ -5,6 +5,8 @@ services:
     image: tortracker:backend
     ports:
       - "3001:3001"
+    volumes:
+      - tortracker/tortracker.db:/app/tortracker.db
 
   tortracker-frontend:
     image: tortracker:frontend
