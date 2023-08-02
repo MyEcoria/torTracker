@@ -42,7 +42,7 @@ const theme = createTheme({
   })
 
 const fetchTorrentInfo = async (torrentId) => {
-  const response = await fetch(`https://api.tornano.cc/torrent/${torrentId}`);
+  const response = await fetch(`https://tortrackerapi.myecoria.com/torrent/${torrentId}`);
   if (!response.ok) {
     throw new Error("Failed to fetch torrent information");
   }
@@ -71,7 +71,7 @@ export default function App() {
       setNotFound(null);
       setTorrents([]);
 
-      const response = await fetch(`https://api.tornano.cc/ip/${toAddress}`);
+      const response = await fetch(`https://tortrackerapi.myecoria.com/ip/${toAddress}`);
       if (!response.ok) {
         throw new Error("Failed to fetch IP information");
       }
