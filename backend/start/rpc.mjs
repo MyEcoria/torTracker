@@ -35,7 +35,7 @@ const PORT = config.port;
 // Middleware pour le parsing du corps des requêtes en JSON
 app.use(express.json());
 app.use(limiter);
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: 'https://tortracker.myecoria.com' }));
 
 // Route GET avec un paramètre
 app.get('/ip/:ip', validateIP, async (req, res) => {
