@@ -32,7 +32,7 @@ const theme = createTheme({
   })
 
 const fetchTorrentsInfo = async () => {
-  const response = await fetch("https://api.tornano.cc/info/torrents");
+  const response = await fetch("https://tortrackerapi.myecoria.com/info/torrents");
   if (!response.ok) {
     throw new Error("Failed to fetch torrents information");
   }
@@ -41,7 +41,7 @@ const fetchTorrentsInfo = async () => {
 };
 
 const fetchPeersInfo = async () => {
-  const response = await fetch("https://api.tornano.cc/info/peers");
+  const response = await fetch("https://tortrackerapi.myecoria.com/info/peers");
   if (!response.ok) {
     throw new Error("Failed to fetch peers information");
   }
