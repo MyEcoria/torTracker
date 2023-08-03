@@ -275,6 +275,21 @@ export function getTorrentInfo(id) {
   });
 }
 
+// Function to get a peer by IP from the database
+export function getTorrentInfoByMagnet(magnet) {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT * FROM torrents WHERE magnet = ?';
+    db.get(sql, [magnet], (err, row) => {
+      if (err) {
+        console.error('Error fetching peer by IP:', err.message);
+        reject(err);
+      } else {
+        resolve(row || null);
+      }
+    });
+  });
+}
+
 export function updateLatestData(magnet) {
   return new Promise((resolve, reject) => {
     const date = new Date().toISOString();

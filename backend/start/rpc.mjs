@@ -111,6 +111,20 @@ app.get('/torrent/:id', async (req, res) => {
   return res.json(informations);
 });
 
+app.get('/magnet/:magnet', async (req, res) => {
+  
+  // Récupérer le paramètre userId depuis l'URL
+  const id = req.params.magnet;
+
+  // Vérifier si le paramètre userId est présent
+  if (!id) {
+    return res.status(400).json({ error: 'Paramètre "magnet" manquant.' });
+  }
+
+  const informations = await db.getTorrentInfoByMagnet(id);
+  return res.json(informations);
+});
+
 app.get('/info/latest', async (req, res) => {
   const numbers = await db.getAllLatest();
   return res.send(numbers);
