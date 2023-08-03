@@ -1,7 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 
 // Remplacez 'ma_base_de_donnees.db' par le nom de votre base de données SQLite
-const db = new sqlite3.Database('tortracker.db');
+const db = new sqlite3.Database('../tortracker.db');
 
 // Fonction pour récupérer l'adresse IP la plus fréquente dans la table 'peers'
 function getMostFrequentIP(callback) {
