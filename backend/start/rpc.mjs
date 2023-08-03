@@ -111,6 +111,11 @@ app.get('/torrent/:id', async (req, res) => {
   return res.json(informations);
 });
 
+app.get('/info/latest', async (req, res) => {
+  const numbers = await db.getAllLatest();
+  return res.send(numbers);
+});
+
 // Démarrer le serveur
 app.listen(PORT, () => {
   console.log(`Serveur Express démarré sur le port ${PORT}`);

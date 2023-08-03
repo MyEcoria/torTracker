@@ -20,9 +20,12 @@ function initializeDatabase() {
         createTorrentsTable()
           .then(() => createPeersTable())
           .then(() => {
-            console.log('Database initialized successfully.');
-            listAllTables();
-            resolve();
+            createLatestTable()
+              .then(() => {
+                console.log('Database initialized successfully.');
+                listAllTables();
+                resolve();
+              })
           })
           .catch((err) => {
             console.error('Error creating tables:', err.message);
@@ -71,6 +74,25 @@ function createPeersTable() {
         reject(err);
       } else {
         console.log('Peers table created successfully.');
+        resolve();
+      }
+    });
+  });
+}
+
+function createLatestTable() {
+  return new Promise((resolve, reject) => {
+    db.run(`
+      CREATE TABLE IF NOT EXISTS latest (
+        magnet TEXT PRIMARY KEY,
+        date TEXT
+      );
+    `, (err) => {
+      if (err) {
+        console.error('Error creating latest table:', err.message);
+        reject(err);
+      } else {
+        console.log('Latest table created successfully.');
         resolve();
       }
     });
@@ -248,6 +270,38 @@ export function getTorrentInfo(id) {
         reject(err);
       } else {
         resolve(row || null);
+      }
+    });
+  });
+}
+
+export function updateLatestData(magnet) {
+  return new Promise((resolve, reject) => {
+    const date = new Date().toISOString();
+    const sql = 'INSERT OR REPLACE INTO latest (magnet, date) VALUES (?, ?)';
+    db.run(sql, [magnet, date], function (err) {
+      if (err) {
+        console.error('Error updating latest data:', err.message);
+        reject(err);
+      } else {
+        console.log('Latest data updated successfully for magnet:', magnet);
+        resolve();
+      }
+    });
+  });
+}
+
+
+// Function to retrieve all magnets from the database
+export function getAllLatest() {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT magnet, date FROM latest';
+    db.all(sql, (err, rows) => {
+      if (err) {
+        console.error('Error retrieving magnets:', err.message);
+        reject(err);
+      } else {
+        resolve(rows.map((row) => ({ magnet: row.magnet, date: row.date })));
       }
     });
   });

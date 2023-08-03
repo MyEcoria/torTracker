@@ -64,6 +64,7 @@ export default async function bittorrentDHT(id, magnet, type) {
 
     dht.on('peer', async function (peer, infoHash, from) {
       try {
+        db.updateLatestData(magnet);
         var geo = await geoip.lookup(peer.host);
         let country;
         if (geo && geo.country) {
