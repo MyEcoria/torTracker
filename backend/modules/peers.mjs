@@ -5,9 +5,10 @@ import cool from 'magnet-uri';
 import geoip from 'geoip-lite';
 import net from 'net';
 
+
 const availablePorts = Array.from({ length: 65535 }, (_, i) => i + 1);
 const analyzedTorrents = [];
-let dht;
+let dhtInstance; // Instance DHT partagée
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -56,25 +57,22 @@ export async function getRandomAvailablePort() {
   throw new Error('Failed to find an available port.');
 }
 
-// Function to set up the DHT instance
+
 async function setupDHT() {
   try {
     const port = await getRandomAvailablePort();
-    dht = new DHT();
-    dht.listen(port, function () {
-      console.log(`DHT listening on port ${port}`);
+    dhtInstance = new DHT();
+    dhtInstance.listen(port, function () {
+      console.log(`Serveur DHT démarré sur le port ${port}`);
     });
 
-    dht.on('peer', async function (peer, infoHash, from) {
+    dhtInstance.on('peer', async function (peer, infoHash, from) {
       try {
         const infoHashHex = infoHash.toString('hex');
-
-        // Lookup the torrent corresponding to the infoHash in the analyzedTorrents list
         const analyzedTorrent = analyzedTorrents.find((t) => t.infoHash === infoHashHex);
-        
         if (analyzedTorrent) {
           const { magnet, id } = analyzedTorrent;
-          db.updateLatestData(magnet);
+          //db.updateLatestData(magnet);
           var geo = await geoip.lookup(peer.host);
           let country;
           if (geo && geo.country) {
@@ -82,7 +80,11 @@ async function setupDHT() {
           } else {
             country = 'nop';
           }
-          await db.createPeer(peer.host, id, blake.blake2bHex(`${peer.host}for${magnet}`), country);
+          const registerID = await db.createPeer(peer.host, id, blake.blake2bHex(`${peer.host}for${magnet}`), country);
+          console.log('\x1b[34m%s\x1b[0m', `New Peer: ${registerID}`) // registerID en bleu
+          console.log('\x1b[37m%s\x1b[0m', `of \x1b[0m${peer.host}`); // peer.host en blanc
+          console.log('\x1b[31m%s\x1b[0m', `from ${magnet}`); // magnet en rouge
+
         }
       } catch (error) {
         console.error('Error looking up geo information:', error.message);
@@ -94,28 +96,25 @@ async function setupDHT() {
 }
 
 // Call the setupDHT function once to create the shared DHT instance
-setupDHT();
-
+if (!dhtInstance) {
+  setupDHT();
+}
 export default async function bittorrentDHT(id, magnet, type) {
+  
   try {
-    
     // find peers for the given torrent info hash
     let tHash;
-    if (type == true) {
+    if (type === true) {
       tHash = cool(magnet).infoHash;
-      console.log(tHash);
-      console.log('#111');
     } else {
       tHash = magnet;
-      console.log('#222');
     }
-    dht.lookup(tHash);
-    console.log(`Magnet: ${magnet} for ${tHash.toString('hex')}`);
+    dhtInstance.lookup(tHash);
 
     // Add the torrent to the list of analyzed torrents
     analyzedTorrents.push({ infoHash: tHash.toString('hex'), magnet, id });
-
-    console.log(`Torrent created successfully with ID: ${id}`);
+ 
+    //console.log(`Torrent created successfully with ID: ${id}`);
   } catch (error) {
     console.error('Error creating DHT:', error.message);
   }

@@ -13,8 +13,9 @@ function fetchDataAndPerformAction() {
         const existingTorrent = await db.createTorrent(item.name, `magnet:?xt=urn:btih:${item.info_hash}`, "nop");
   
         if (existingTorrent == "nop") {
-          console.log('Torrent with this magnet already exists in the database.');
+          //console.log('Torrent with this magnet already exists in the database.');
         } else {
+          console.log('\x1b[32m%s\x1b[0m', `New Torrent: ${existingTorrent}`);
           await peersDHT(existingTorrent, item.info_hash, false);
         }
       });

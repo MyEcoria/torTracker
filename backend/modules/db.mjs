@@ -22,8 +22,8 @@ function initializeDatabase() {
           .then(() => {
             createLatestTable()
               .then(() => {
-                console.log('Database initialized successfully.');
-                listAllTables();
+                //console.log('Database initialized successfully.');
+                //listAllTables();
                 resolve();
               })
           })
@@ -50,7 +50,7 @@ function createTorrentsTable() {
         console.error('Error creating torrents table:', err.message);
         reject(err);
       } else {
-        console.log('Torrents table created successfully.');
+        //console.log('Torrents table created successfully.');
         resolve();
       }
     });
@@ -73,7 +73,7 @@ function createPeersTable() {
         console.error('Error creating peers table:', err.message);
         reject(err);
       } else {
-        console.log('Peers table created successfully.');
+        //console.log('Peers table created successfully.');
         resolve();
       }
     });
@@ -92,7 +92,7 @@ function createLatestTable() {
         console.error('Error creating latest table:', err.message);
         reject(err);
       } else {
-        console.log('Latest table created successfully.');
+        //console.log('Latest table created successfully.');
         resolve();
       }
     });
@@ -111,7 +111,7 @@ function listAllTables() {
         if (err) {
           reject(err);
         } else {
-          console.log("List of tables in the database:");
+          //console.log("List of tables in the database:");
           rows.forEach((row) => {
             console.log(row.name);
           });
@@ -121,7 +121,6 @@ function listAllTables() {
     });
 }
 
-listAllTables();
 
 // Function to create a new torrent entry in the database
 export function createTorrent(name, magnet, img) {
@@ -130,7 +129,7 @@ export function createTorrent(name, magnet, img) {
     getTorrentByMagnet(magnet)
       .then((existingTorrent) => {
         if (existingTorrent) {
-          console.log('Torrent with this magnet already exists in the database.');
+          //console.log('Torrent with this magnet already exists in the database.');
           resolve("nop");
         } else {
           const sql = 'INSERT INTO torrents (name, magnet, img) VALUES (?, ?, ?)';
@@ -139,7 +138,7 @@ export function createTorrent(name, magnet, img) {
               console.error('Error creating torrent:', err.message);
               reject(err);
             } else {
-              console.log('Torrent created successfully with ID:', this.lastID);
+              //console.log('Torrent created successfully with ID:', this.lastID);
               resolve(this.lastID);
             }
           });
@@ -161,7 +160,7 @@ export function createPeer(ip, idTorrent, hash, ipCountry) {
         console.error('Error creating peer:', err.message);
         reject(err);
       } else {
-        console.log('Peer created successfully with ID:', this.lastID);
+        //console.log('Peer created successfully with ID:', this.lastID);
         resolve(this.lastID);
       }
     });

@@ -15,7 +15,7 @@ async function processAllTorrents() {
     // Process each torrent concurrently using Promise.all
     await Promise.all(
       torrents.map(async (torrent) => {
-        console.log('Processing torrent with ID:', torrent.id);
+        //console.log('Processing torrent with ID:', torrent.id);
         await peersDHT(torrent.id, torrent.magnet, true);
       })
     );
