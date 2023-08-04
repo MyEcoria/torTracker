@@ -7,8 +7,6 @@ import net from 'net';
 
 
 const availablePorts = Array.from({ length: 65535 }, (_, i) => i + 1);
-const analyzedTorrents = [];
-let dhtInstance; // Instance DHT partagée
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -31,90 +29,80 @@ async function isPortAvailable(port) {
   });
 }
 
+
 export async function getRandomAvailablePort() {
-  const minPort = 100;
-  const maxPort = 65535;
-  const range = maxPort - minPort + 1;
-
-  // Generate a random port within the desired range
-  const randomPort = Math.floor(Math.random() * range) + minPort;
-
-  // Check if the random port is available
-  const isAvailable = await isPortAvailable(randomPort);
-  if (isAvailable) {
-    return randomPort;
-  }
-
-  // If the random port is not available, try finding another available port
-  for (let i = 0; i < availablePorts.length; i++) {
-    const port = availablePorts[i];
-    const isAvailable = await isPortAvailable(port);
+    const minPort = 100;
+    const maxPort = 65535;
+    const range = maxPort - minPort + 1;
+    const availablePorts = [];
+  
+    // Generate a random port within the desired range
+    const randomPort = Math.floor(Math.random() * range) + minPort;
+  
+    // Check if the random port is available
+    const isAvailable = await isPortAvailable(randomPort);
     if (isAvailable) {
-      return port;
+      // Wait for 3 seconds before retesting the port to make sure it's stable
+      await delay(3000);
+      const isStable = await isPortAvailable(randomPort);
+      if (isStable) {
+        return randomPort;
+      }
     }
-  }
-
-  throw new Error('Failed to find an available port.');
+  
+    // If the random port is not available or not stable, try finding another available port
+    for (let port = minPort; port <= maxPort; port++) {
+      const isAvailable = await isPortAvailable(port);
+      if (isAvailable) {
+        // Wait for 3 seconds before retesting the port to make sure it's stable
+        await delay(3000);
+        const isStable = await isPortAvailable(port);
+        if (isStable) {
+          return port;
+        }
+      }
+    }
+  
+    throw new Error('Failed to find an available and stable port.');
 }
 
-
-async function setupDHT() {
+export default async function bittorrentDHT(id, magnet, type) {
   try {
     const port = await getRandomAvailablePort();
-    dhtInstance = new DHT();
-    dhtInstance.listen(port, function () {
-      console.log(`Serveur DHT démarré sur le port ${port}`);
+    const dht = new DHT();
+    dht.listen(port, function () {
+      console.log(`DHT listening on port ${port}`);
     });
 
-    dhtInstance.on('peer', async function (peer, infoHash, from) {
+    dht.on('peer', async function (peer, infoHash, from) {
       try {
-        const infoHashHex = infoHash.toString('hex');
-        const analyzedTorrent = analyzedTorrents.find((t) => t.infoHash === infoHashHex);
-        if (analyzedTorrent) {
-          const { magnet, id } = analyzedTorrent;
-          //db.updateLatestData(magnet);
-          var geo = await geoip.lookup(peer.host);
-          let country;
-          if (geo && geo.country) {
-            country = geo.country;
-          } else {
-            country = 'nop';
-          }
-          const registerID = await db.createPeer(peer.host, id, blake.blake2bHex(`${peer.host}for${magnet}`), country);
-          console.log('\x1b[34m%s\x1b[0m', `New Peer: ${registerID}`) // registerID en bleu
-          console.log('\x1b[37m%s\x1b[0m', `of \x1b[0m${peer.host}`); // peer.host en blanc
-          console.log('\x1b[31m%s\x1b[0m', `from ${magnet}`); // magnet en rouge
-
+        //db.updateLatestData(magnet);
+        var geo = await geoip.lookup(peer.host);
+        let country;
+        if (geo && geo.country) {
+          country = geo.country;
+        } else {
+          country = 'nop';
         }
+
+        const registerID = await db.createPeer(peer.host, id, blake.blake2bHex(`${peer.host}for${magnet}`), country);
+        console.log("+------------------------------------------------------+");
+        console.log('\x1b[34m%s\x1b[0m', `New Peer: ${registerID}`) // registerID en bleu
+        console.log('\x1b[37m%s\x1b[0m', `of \x1b[0m${peer.host}`); // peer.host en blanc
+        console.log('\x1b[31m%s\x1b[0m', `from ${magnet}`); // magnet en rouge
       } catch (error) {
         console.error('Error looking up geo information:', error.message);
       }
     });
-  } catch (error) {
-    console.error('Error setting up DHT:', error.message);
-  }
-}
 
-// Call the setupDHT function once to create the shared DHT instance
-if (!dhtInstance) {
-  setupDHT();
-}
-export default async function bittorrentDHT(id, magnet, type) {
-  
-  try {
     // find peers for the given torrent info hash
     let tHash;
-    if (type === true) {
+    if (type == true) {
       tHash = cool(magnet).infoHash;
     } else {
       tHash = magnet;
     }
-    dhtInstance.lookup(tHash);
-
-    // Add the torrent to the list of analyzed torrents
-    analyzedTorrents.push({ infoHash: tHash.toString('hex'), magnet, id });
- 
-    //console.log(`Torrent created successfully with ID: ${id}`);
+    dht.lookup(tHash);
   } catch (error) {
     console.error('Error creating DHT:', error.message);
   }

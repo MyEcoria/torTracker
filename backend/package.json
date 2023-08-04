@@ -11,6 +11,7 @@
     "express-rate-limit": "^6.8.1",
     "express-validator": "^7.0.1",
     "geoip-lite": "^1.4.7",
+    "ip-to-asn": "^1.0.0",
     "magnet-uri": "^7.0.5",
     "mysql2": "^3.5.2",
     "node-fetch": "^3.3.2",
