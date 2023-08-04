@@ -4,7 +4,7 @@
 cd backend
 
 # Renommer le fichier general.json.exemple en general.json
-mv config/general.json.exemple general.json
+mv config/general.json.exemple config/general.json
 
 # Construction de l'image Docker pour le backend
 sudo docker build -t tortracker:backend .
