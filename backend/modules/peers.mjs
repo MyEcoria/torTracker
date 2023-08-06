@@ -70,8 +70,10 @@ export default async function bittorrentDHT(id, magnet, type) {
   try {
     const port = await getRandomAvailablePort();
     const dht = new DHT();
-    dht.listen(port, function () {
-      console.log(`DHT listening on port ${port}`);
+    dht.listen(); // Le port sera choisi automatiquement par le système d'exploitation
+
+    dht.on('listening', function () {
+      console.log(`DHT listening on port ${dht.address().port}`);
     });
 
     dht.on('peer', async function (peer, infoHash, from) {
