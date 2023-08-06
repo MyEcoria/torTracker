@@ -1,3 +1,4 @@
+// Importez les modules nécessaires ici...
 import * as db from '../modules/db.mjs';
 import peersDHT from '../modules/peers.mjs';
 
@@ -24,5 +25,17 @@ async function processAllTorrents() {
   }
 }
 
-// Start processing all torrents
-processAllTorrents();
+// Définissez une fonction pour démarrer le processus de traitement des torrents et effectuer les actions nécessaires
+async function startProcess() {
+  await processAllTorrents();
+  console.log('Torrent processing restarted.');
+
+  // Redémarrez le traitement des torrents toutes les 20 minutes (1200000 ms)
+  setInterval(async () => {
+    await processAllTorrents();
+    console.log('Torrent processing restarted.');
+  }, 1200000);
+}
+
+// Appelez la fonction startProcess pour lancer le processus
+startProcess();
