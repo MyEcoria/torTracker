@@ -1,6 +1,6 @@
 # TorTracker
 
-![p2p](https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/P2P-network.svg/991px-P2P-network.svg.png)
+![p2p](logo.png)
 
 ### General
 TorTracker is an innovative project designed to scan an RSS feed, retrieve magnets, and explore hundreds or even thousands of torrents to compile lists of IP addresses. Leveraging the power of bittorrent-dht technology, it continuously scans a vast array of torrents in real-time.
