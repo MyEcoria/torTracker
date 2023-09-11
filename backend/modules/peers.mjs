@@ -87,13 +87,13 @@ export default async function bittorrentDHT(id, magnet, type) {
           country = 'nop';
         }
 
-        const registerID = await db.createPeer(peer.host, id, blake.blake2bHex(`${peer.host}for${magnet}`), country);
+        const registerID = await db.createPeer(peer.host, id, country);
         console.log("+------------------------------------------------------+");
         console.log('\x1b[34m%s\x1b[0m', `New Peer: ${registerID}`) // registerID en bleu
         console.log('\x1b[37m%s\x1b[0m', `of \x1b[0m${peer.host}`); // peer.host en blanc
         console.log('\x1b[31m%s\x1b[0m', `from ${magnet}`); // magnet en rouge
       } catch (error) {
-        console.error('Error looking up geo information:', error.message);
+        
       }
     });
 

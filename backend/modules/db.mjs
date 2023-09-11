@@ -64,7 +64,6 @@ function createPeersTable() {
         id INTEGER PRIMARY KEY,
         ip TEXT,
         id_torrent INTEGER,
-        hash TEXT,
         date TEXT,
         ipCountry TEXT
       );
@@ -150,22 +149,40 @@ export function createTorrent(name, magnet, img) {
   });
 }
 
-// Function to create a new peer entry in the database
-export function createPeer(ip, idTorrent, hash, ipCountry) {
+export function createPeer(ip, idTorrent, ipCountry) {
   return new Promise((resolve, reject) => {
-    const date = new Date().toISOString(); // Get the current date and time as a string
-    const sql = 'INSERT INTO peers (ip, id_torrent, hash, date, ipCountry) VALUES (?, ?, ?, ?, ?)';
-    db.run(sql, [ip, idTorrent, hash, date, ipCountry], function (err) {
-      if (err) {
-        console.error('Error creating peer:', err.message);
-        reject(err);
+    // Check if the IP and idTorrent combination already exists in the database
+    const checkQuery = 'SELECT COUNT(*) AS count FROM peers WHERE ip = ? AND id_torrent = ?';
+    db.get(checkQuery, [ip, idTorrent], (checkErr, row) => {
+      if (checkErr) {
+        console.error('Error checking peer existence:', checkErr.message);
+        reject(checkErr);
+        return;
+      }
+
+      if (row.count > 0) {
+        // An entry with the same IP and idTorrent combination already exists
+        const errorMessage = 'Peer with the same IP and idTorrent already exists';
+        console.error(errorMessage);
+        reject(new Error(errorMessage));
+        return "444";
       } else {
-        //console.log('Peer created successfully with ID:', this.lastID);
-        resolve(this.lastID);
+        // If the combination is unique, proceed with the insertion
+        const date = new Date().toISOString(); // Get the current date and time as a string
+        const sql = 'INSERT INTO peers (ip, id_torrent, date, ipCountry) VALUES (?, ?, ?, ?)';
+        db.run(sql, [ip, idTorrent, date, ipCountry], function (insertErr) {
+          if (insertErr) {
+            console.error('Error creating peer:', insertErr.message);
+            reject(insertErr);
+          } else {
+            resolve(this.lastID);
+          }
+        });
       }
     });
   });
 }
+
 
 // Function to get a torrent by magnet from the database
 export function getTorrentByMagnet(magnet) {

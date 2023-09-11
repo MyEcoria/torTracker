@@ -34,7 +34,7 @@ async function startProcess() {
   setInterval(async () => {
     await processAllTorrents();
     console.log('Torrent processing restarted.');
-  }, 1200000);
+  }, 300000);
 }
 
 // Appelez la fonction startProcess pour lancer le processus
