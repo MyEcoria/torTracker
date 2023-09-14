@@ -1,0 +1,6 @@
+{
+    "torrent911": "https://www.torrent911.me/rss",
+    "torrent911Id": "https://www.torrent911.io/torrent/",
+    "proxy": "host:port",
+    "port": 3001
+}
