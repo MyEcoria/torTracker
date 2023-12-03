@@ -79,15 +79,9 @@ export default async function bittorrentDHT(id, magnet, type) {
     dht.on('peer', async function (peer, infoHash, from) {
       try {
         //db.updateLatestData(magnet);
-        var geo = await geoip.lookup(peer.host);
-        let country;
-        if (geo && geo.country) {
-          country = geo.country;
-        } else {
-          country = 'nop';
-        }
+        
 
-        const registerID = await db.createPeer(peer.host, id, country);
+        const registerID = await db.createPeer(peer.host, id);
         console.log("+------------------------------------------------------+");
         console.log('\x1b[34m%s\x1b[0m', `New Peer: ${registerID}`) // registerID en bleu
         console.log('\x1b[37m%s\x1b[0m', `of \x1b[0m${peer.host}`); // peer.host en blanc
