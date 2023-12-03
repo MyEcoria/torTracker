@@ -64,8 +64,7 @@ function createPeersTable() {
         id INTEGER PRIMARY KEY,
         ip TEXT,
         id_torrent INTEGER,
-        date TEXT,
-        ipCountry TEXT
+        date TEXT
       );
     `, (err) => {
       if (err) {
@@ -149,7 +148,7 @@ export function createTorrent(name, magnet, img) {
   });
 }
 
-export function createPeer(ip, idTorrent, ipCountry) {
+export function createPeer(ip, idTorrent) {
   return new Promise((resolve, reject) => {
     // Check if the IP and idTorrent combination already exists in the database
     const checkQuery = 'SELECT COUNT(*) AS count FROM peers WHERE ip = ? AND id_torrent = ?';
@@ -169,8 +168,8 @@ export function createPeer(ip, idTorrent, ipCountry) {
       } else {
         // If the combination is unique, proceed with the insertion
         const date = new Date().toISOString(); // Get the current date and time as a string
-        const sql = 'INSERT INTO peers (ip, id_torrent, date, ipCountry) VALUES (?, ?, ?, ?)';
-        db.run(sql, [ip, idTorrent, date, ipCountry], function (insertErr) {
+        const sql = 'INSERT INTO peers (ip, id_torrent, date) VALUES (?, ?, ?)';
+        db.run(sql, [ip, idTorrent, date], function (insertErr) {
           if (insertErr) {
             console.error('Error creating peer:', insertErr.message);
             reject(insertErr);
