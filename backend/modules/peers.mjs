@@ -2,7 +2,7 @@ import * as db from '../modules/db.mjs';
 import DHT from 'bittorrent-dht';
 import blake from 'blakejs';
 import cool from 'magnet-uri';
-import geoip from 'geoip-lite';
+
 import net from 'net';
 
 
