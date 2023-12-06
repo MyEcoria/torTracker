@@ -76,7 +76,7 @@ export default function App() {
             <Card>
               <Card.Body>
                 <Text h4>Total Torrents</Text>
-                <Text>{torrentsCount}</Text>
+                <Text>{torrentsCount === 0 ? 'Loading...' : torrentsCount}</Text>
               </Card.Body>
             </Card>
           </Grid>
@@ -85,7 +85,7 @@ export default function App() {
             <Card>
               <Card.Body>
                 <Text h4>Total Peers</Text>
-                <Text>{peersCount}</Text>
+                <Text>{peersCount === 0 ? 'Loading...' : peersCount}</Text>
               </Card.Body>
             </Card>
           </Grid>
