@@ -42,7 +42,7 @@ const theme = createTheme({
   })
 
 const fetchTorrentInfo = async (torrentId) => {
-  const response = await fetch(`https://tortrackerapi.myecoria.com/torrent/${torrentId}`);
+  const response = await fetch(`/torrent/${torrentId}`);
   if (!response.ok) {
     throw new Error("Failed to fetch torrent information");
   }
@@ -71,7 +71,7 @@ export default function App() {
       setNotFound(null);
       setTorrents([]);
 
-      const response = await fetch(`https://tortrackerapi.myecoria.com/ip/${toAddress}`);
+      const response = await fetch(`/ip/${toAddress}`);
       if (!response.ok) {
         throw new Error("Failed to fetch IP information");
       }
@@ -107,7 +107,7 @@ export default function App() {
         <NavBarre></NavBarre>
 
         <Container style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "70vh" }}>
-          <Card isHoverable variant="bordered" css={{ maxWidth: "100%", wordBreak: "break-all" }}>
+          <Card isHoverable variant="bordered" className="max-w-[350px] sm:max-w-[400px]">
             <div id="allForm">
               <Card.Body style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <Card.Header>

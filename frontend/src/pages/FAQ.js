@@ -33,11 +33,12 @@ const theme = createTheme({
 export default function App() {
   return (
     <NextUIProvider theme={theme}>
-    <div>
-      <NavBarre></NavBarre>
-        <Grid.Container gap={2}>
-        <Collapse.Group splitted style={{width: "100%"}}>
-            <Grid>
+      <div className="mx-auto text-center"> {/* Center the content horizontally and align text to center */}
+        <NavBarre></NavBarre>
+        <div className="max-w-[350px] sm:max-w-[1000px] mx-auto"> {/* Center the container horizontally */}
+          <Grid.Container gap={2} className="justify-center"> {/* Center the grid items horizontally */}
+            <Collapse.Group splitted style={{ width: "100%" }}>
+              <Grid>
                 <Collapse
                   shadow
                   title="General explanations"
@@ -47,23 +48,21 @@ export default function App() {
               </Grid>
               <Collapse title="What is TorTracker's goal?">
                 <Text>
-                The goal of TorTracker is to practice using different technologies that I have never used.
+                  The goal of TorTracker is to practice using different technologies that I have never used.
                 </Text>
               </Collapse>
               <Collapse title="What is the collected data used for?">
                 <Text>
-                The data collected is useless, this project is purely educational and for the sole purpose of training.
+                  The data collected is useless, this project is purely educational and for the sole purpose of training.
                 </Text>
               </Collapse>
             </Collapse.Group>
-          <Grid>
-            
-          </Grid>
-        </Grid.Container>
+            <Grid></Grid>
+          </Grid.Container>
 
-        <Grid.Container gap={2}>
-        <Collapse.Group splitted style={{width: "100%"}}>
-            <Grid>
+          <Grid.Container gap={2} className="justify-center"> {/* Center the grid items horizontally */}
+            <Collapse.Group splitted style={{ width: "100%" }}>
+              <Grid>
                 <Collapse
                   shadow
                   title="Technologie"
@@ -73,15 +72,14 @@ export default function App() {
               </Grid>
               <Collapse title="bittorent-dht">
                 <Text>
-                Bittorent-dht is the main bittorent protocol peer retrieval technology, so in this project it is used to retrieve large amounts of ip without downloading the data.
+                  Bittorent-dht is the main bittorent protocol peer retrieval technology, so in this project, it is used to retrieve large amounts of ip without downloading the data.
                 </Text>
               </Collapse>
             </Collapse.Group>
-          <Grid>
-            
-          </Grid>
-        </Grid.Container>
+            <Grid></Grid>
+          </Grid.Container>
+        </div>
       </div>
-      </NextUIProvider>
+    </NextUIProvider>
   );
 }

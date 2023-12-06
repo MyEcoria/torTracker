@@ -32,7 +32,7 @@ const theme = createTheme({
   })
 
 const fetchTorrentsInfo = async () => {
-  const response = await fetch("https://tortrackerapi.myecoria.com/info/torrents");
+  const response = await fetch("/info/torrents");
   if (!response.ok) {
     throw new Error("Failed to fetch torrents information");
   }
@@ -41,7 +41,7 @@ const fetchTorrentsInfo = async () => {
 };
 
 const fetchPeersInfo = async () => {
-  const response = await fetch("https://tortrackerapi.myecoria.com/info/peers");
+  const response = await fetch("/info/peers");
   if (!response.ok) {
     throw new Error("Failed to fetch peers information");
   }
@@ -67,9 +67,10 @@ export default function App() {
 
   return (
     <NextUIProvider theme={theme}>
-      <div>
+      <div className="mx-auto text-center">
         <NavBarre />
 
+      <div className="max-w-[350px] sm:max-w-[1000px] mx-auto">
         <Grid.Container gap={2}>
           <Grid xs={6}>
             <Card>
@@ -89,6 +90,7 @@ export default function App() {
             </Card>
           </Grid>
         </Grid.Container>
+        </div>
       </div>
     </NextUIProvider>
   );
